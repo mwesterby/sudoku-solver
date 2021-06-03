@@ -9,22 +9,6 @@ public class SubGrid {
 	
 	public SubGrid(int subGridIndex) {
 		
-		
-		/*
-		 * 	   RC
-		 * 0 = 00
-		 * 1 = 03
-		 * 2 = 06
-		 * 3 = 30
-		 * 4 = 33
-		 * 5 = 36
-		 * 6 = 60
-		 * 7 = 63
-		 * 8 = 66
-		 * 
-		 * 
-		 */
-		
 		int startingRow = (subGridIndex / 3) * 3;
 		int startingCol = (subGridIndex % 3) * 3;
 		
@@ -50,6 +34,7 @@ public class SubGrid {
 	public HashSet<Integer> getRemainingValues() {
 		
 		HashSet<Integer> remainingValues = new HashSet<Integer>();
+		
 		// Add all possible values
 		for(int i = 1; i <= 9; i++) {
 			remainingValues.add(i);
@@ -75,10 +60,6 @@ public class SubGrid {
 			}
 		}
 		return true;
-	}
-	
-	public ArrayList<Square> getSquares() {
-		return squares;
 	}
 	
 	public Square getSquare(int index) {

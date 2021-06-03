@@ -5,9 +5,7 @@ import java.util.HashSet;
 public class Square {
 
 	private int value;
-	
 	private HashSet<Integer> possibilities;
-	
 	private int row;
 	private int col;
 	
@@ -21,11 +19,6 @@ public class Square {
 		}
 		value = 0;
 	}
-	
-//	public Square(int value) {
-//		possibilities = new HashSet<Integer>();
-//		this.value = value;
-//	}
 	
 	public int getValue() {
 		return value;

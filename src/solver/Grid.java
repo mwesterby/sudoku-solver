@@ -31,31 +31,6 @@ public class Grid {
 		}
 	}
 	
-//	public Square getSquare(int row, int col) {
-//		SubGrid subGrid = getContainingSubgrid(row, col);
-//		
-//		/*
-//		 * C  R    C  R
-//		 * 4, 3 == 1, 0
-//		 * 5, 4 == 6, 1
-//		 */
-//		
-//		int theRow = (row % 3) * 3;
-//		int theCol = col % 3;
-//		
-//		Square square = subGrid.getSquare(theRow + theCol);
-//		
-//		return square;
-//	}
-//	
-//	private SubGrid getContainingSubgrid(int row, int col) {
-//		int subgridrow = (row / 3) * 3;
-//		int subgridcol = col / 3;
-//		
-//		return subGrids.get(subgridrow + subgridcol);
-//	}
-	
-
 	private void initaliseSubGrids() {
 		subGrids = new ArrayList<SubGrid>();
 		for (int i = 0; i < 9; i++) {
@@ -63,21 +38,33 @@ public class Grid {
 		}
 	}
 	
-	public ArrayList<SubGrid> getSubgrids() {
-		return subGrids;
+	
+	public Square getSquare(int row, int col) {
+		SubGrid subGrid = getContainingSubgrid(row, col);
+		Square square = subGrid.getSquare(((row % 3) * 3) + (col % 3));
+		return square;
 	}
 	
+	private SubGrid getContainingSubgrid(int row, int col) {
+		return subGrids.get(((row / 3) * 3) + (col / 3));
+	}
 	
-	public boolean gridComplete() {
-		for(int i = 0; i < 9; i++) {
-			ArrayList<Square> row = getRow(i);
-			for(Square square: row) {
-				if(square.getValue() == 0) {
-					return false;
-				}
+	public ArrayList<SubGrid> getIncompleteSubgrids() {
+		ArrayList<SubGrid> incompleteSubGrids = new ArrayList<>();
+		for(SubGrid subGrid : subGrids) {
+			if(!subGrid.isComplete()) {
+				incompleteSubGrids.add(subGrid);
 			}
 		}
-		
+		return incompleteSubGrids;
+	}
+	
+	public boolean gridComplete() {
+		for(SubGrid subGrid: subGrids) {
+			if(!subGrid.isComplete()) {
+				return false;
+			}
+		}
 		return true;
 	}
 	
@@ -86,41 +73,12 @@ public class Grid {
 	 * @param colNumber
 	 * @return
 	 */
-	public ArrayList<Square> getColumn(int colNumber) {
-		
-		
-		
-//		int square1 = colNumber % 3;
-//		int square2 = square1 + 3;
-//		int square3 = square2 + 3;
-		
-		/*
-		 * 0 == 0, 3, 6
-		 * 1 == 0, 3, 6
-		 * 2 == 0, 3, 6
-		 * 3 == 1, 4, 7
-		 * 4 == 1, 4, 7
-		 * 5 == 1, 4, 7
-		 * 6 == 2, 5, 8
-		 * 7 == 2, 5, 8
-		 * 8 == 2, 5, 8
-		 */
-//		int subGrid1 = colNumber / 3;
-//		int subGrid2 = subGrid1 + 3;
-//		int subGrid3 = subGrid2 + 3;
-		
-		
-		
-		
+	public ArrayList<Square> getColumn(int colNumber) {	
 		ArrayList<Square> column = new ArrayList<>();
 		
-		for(int subGrid = colNumber / 3; subGrid < 9; subGrid += 3) {
-			for(int square = colNumber % 3; square < 9; square += 3) {
-				column.add(subGrids.get(subGrid).getSquare(square));
-			}
+		for(int row = 0; row < 9; row++) {
+			column.add(getSquare(row, colNumber));
 		}
-
-		
 		return column;
 	}
 	
@@ -132,44 +90,10 @@ public class Grid {
 	 */
 	public ArrayList<Square> getRow(int rowNumber) {
 		
-		/*
-		 * Subgrids
-		 * 0 == 0, 1, 2
-		 * 1 == 0, 1, 2
-		 * 2 == 0, 1, 2
-		 * 3 == 3, 4, 5
-		 * 4 == 3, 4, 5
-		 * 5 == 3, 4, 5
-		 * 6 == 6, 7, 8
-		 * 7 == 6, 7, 8
-		 * 8 == 6, 7, 8
-		 */
-		
-		/*
-		 * Squares
-		 * 0 == 0, 1, 2
-		 * 1 == 3, 4, 5
-		 * 2 == 6, 7, 8
-		 * 3 == 0, 1, 2
-		 * 4 == 3, 4, 5
-		 * 5 == 6, 7, 8
-		 * 6 == 0, 1, 2
-		 * 7 == 3, 4, 5
-		 * 8 == 6, 7, 8
-		 */
-		
 		ArrayList<Square> row = new ArrayList<>();
 		
-		int subgrid = (rowNumber / 3) * 3;
-		int square = (rowNumber % 3) * 3;
-		
-		for(int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
-				row.add(subGrids.get(subgrid).getSquare(square));
-				square++;
-			}
-			square = (rowNumber % 3) * 3;
-			subgrid++;
+		for (int col = 0; col < 9; col++) {
+			row.add(getSquare(rowNumber, col));
 		}
 		
 		return row;
@@ -178,7 +102,6 @@ public class Grid {
 	
 	public HashSet<Integer> remainingPossibilitiesInRow(Square currentSquare) {
 		ArrayList<Square> row = getRow(currentSquare.getRow());
-		
 		HashSet<Integer> remainingPossibilities = new HashSet<>();
 		
 		for(Square square: row) {
@@ -193,7 +116,6 @@ public class Grid {
 	
 	public HashSet<Integer> remainingPossibilitiesInColumn(Square currentSquare) {
 		ArrayList<Square> col = getColumn(currentSquare.getCol());
-		
 		HashSet<Integer> remainingPossibilities = new HashSet<>();
 		
 		for(Square square: col) {
@@ -212,57 +134,43 @@ public class Grid {
 	 * @param value
 	 */
 	public void addValue(int col, int row, int value) {
-		ArrayList<Square> thisCol = getColumn(col);
-		ArrayList<Square> thisRow = getRow(row);
-		Square square = thisCol.get(row);
+		ArrayList<Square> wholeColumn = getColumn(col);
+		ArrayList<Square> wholeRow = getRow(row);
+		Square square = getSquare(row, col);
+		
 		square.setValue(value);
 		
-		for(Square squareToUpdate: thisCol) {
+		for(Square squareToUpdate: wholeColumn) {
 			squareToUpdate.removePossibility(value);
 		}
 		
-		for(Square squareToUpdate: thisRow) {
+		for(Square squareToUpdate: wholeRow) {
 			squareToUpdate.removePossibility(value);
 		}
-		
-		
-		/*
-		 * 0 - 00, 01, 02, 10, 11, 12, 20, 21, 22
-		 * 1
-		 * 2
-		 * 3
-		 * 4
-		 * 5
-		 * 6
-		 * 7
-		 * 8
-		 * 
-		 * 
-		 * 
-		 */
-		
-		int subgridrow = (row / 3) * 3;
-		int subgridcol = col / 3;
-		
-		subGrids.get(subgridrow + subgridcol).removePossibility(value);
+
+		getContainingSubgrid(row, col).removePossibility(value);
 	}
-	
 	
 	public void printGrid() {
 		
+		final String VERTICAL_LINE = "+-------+-------+-------+";
+		
+		System.out.println(VERTICAL_LINE); // Top
 		for(int i = 0; i < 9; i++) {
 			ArrayList<Square> row = getRow(i);
-			if(i % 3 == 0) {
-				System.out.println("----- ------ ------");
+			if(i % 3 == 0 && i != 0) {
+				System.out.println(VERTICAL_LINE); // Between Sub Grids
 			}
+			System.out.print("| "); // Left edge
 			for(Square square : row) {
 				System.out.print(square.getValue() + " ");
 				if(square.getCol() == 2 || square.getCol() == 5) {
-					System.out.print("|");
+					System.out.print("| "); // Between Sub Grids
 				}
 			}
-			System.out.println();
+			System.out.println("|"); // Right edge
 		}
+		System.out.println(VERTICAL_LINE); // Bottom
 		System.out.println();
 	}
 }
