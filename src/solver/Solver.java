@@ -22,15 +22,10 @@ public class Solver {
 			{0, 0, 4}, {0, 5, 0}, {6, 2 ,7},
 		};
 		
-		try {
-			Grid grid2 = new Grid(startingGrid);
-			grid2.printGrid();
-			solve(grid2);
-			grid2.printGrid();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Grid grid2 = new Grid(startingGrid);
+		grid2.printGrid();
+		solve(grid2);
+		grid2.printGrid();
 		System.out.println("Done!");
 		
 	}
@@ -73,6 +68,7 @@ public class Solver {
 								 		
 								 		// Add value to grid and update other squares with this
 								 		grid.addValue(square.getCol(), square.getRow(), possibility);
+								 		System.out.println("This one!");
 								 		break;
 								 	}
 							 }

@@ -11,7 +11,7 @@ public class Grid {
 		initaliseSubGrids();
 	}
 	
-	public Grid(int[][] startingGrid) throws Exception {
+	public Grid(int[][] startingGrid) {
 		initaliseSubGrids();
 		
 		int startingGridIndex = 0;
