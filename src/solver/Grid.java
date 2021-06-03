@@ -8,13 +8,61 @@ public class Grid {
 	private ArrayList<SubGrid> subGrids;
 	
 	public Grid() {
+		initaliseSubGrids();
+	}
+	
+	public Grid(int[][] startingGrid) throws Exception {
+		initaliseSubGrids();
+		
+		int startingGridIndex = 0;
+		
+		for (int row = 0; row < 9; row++) {
+			for (int subGridInRow = 0; subGridInRow < 3; subGridInRow++) {
+				for (int subGridCol = 0; subGridCol < 3; subGridCol++) {
+					int col = (subGridInRow * 3) + subGridCol;
+					if(startingGrid[startingGridIndex][subGridCol] != 0) {
+						addValue(col, row, startingGrid[startingGridIndex][subGridCol]);
+					}
+					
+				}
+				startingGridIndex++;
+			}
+
+		}
+	}
+	
+//	public Square getSquare(int row, int col) {
+//		SubGrid subGrid = getContainingSubgrid(row, col);
+//		
+//		/*
+//		 * C  R    C  R
+//		 * 4, 3 == 1, 0
+//		 * 5, 4 == 6, 1
+//		 */
+//		
+//		int theRow = (row % 3) * 3;
+//		int theCol = col % 3;
+//		
+//		Square square = subGrid.getSquare(theRow + theCol);
+//		
+//		return square;
+//	}
+//	
+//	private SubGrid getContainingSubgrid(int row, int col) {
+//		int subgridrow = (row / 3) * 3;
+//		int subgridcol = col / 3;
+//		
+//		return subGrids.get(subgridrow + subgridcol);
+//	}
+	
+
+	private void initaliseSubGrids() {
 		subGrids = new ArrayList<SubGrid>();
 		for (int i = 0; i < 9; i++) {
 			subGrids.add(new SubGrid(i));
 		}
 	}
 	
-
 	public ArrayList<SubGrid> getSubgrids() {
 		return subGrids;
 	}
@@ -157,7 +205,12 @@ public class Grid {
 		return remainingPossibilities;
 	}
 	
-	
+	/**
+	 * 
+	 * @param col
+	 * @param row
+	 * @param value
+	 */
 	public void addValue(int col, int row, int value) {
 		ArrayList<Square> thisCol = getColumn(col);
 		ArrayList<Square> thisRow = getRow(row);

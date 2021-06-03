@@ -2,58 +2,35 @@ package solver;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 
 public class Solver {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		System.out.println("Sudoku Solver!");
+	
+		int[][] startingGrid = new int[][] {
+			{0, 0, 9}, {0, 4, 0}, {0, 0 ,0},
+			{0, 0, 0}, {0, 0, 5}, {3, 1 ,0},
+			{0, 6, 1}, {0, 0, 8}, {0, 5 ,0},
+			
+			{0, 0, 5}, {4, 0, 0}, {2, 0 ,3},
+			{0, 1, 0}, {0, 0, 7}, {0, 0 ,8},
+			{0, 8, 0}, {0, 0, 0}, {7, 6 ,0},
+
+			{3, 0, 6}, {0, 1, 9}, {4, 0 ,0},
+			{7, 0, 0}, {0, 0, 0}, {0, 0 ,0},
+			{0, 0, 4}, {0, 5, 0}, {6, 2 ,7},
+		};
 		
-		Grid grid = new Grid();
-				   // C  R  V
-		grid.addValue(0, 0, 5);
-		grid.addValue(1, 0, 3);
-		grid.addValue(4, 0, 7);
-		
-		grid.addValue(0, 1, 6);
-		grid.addValue(3, 1, 1);
-		grid.addValue(4, 1, 9);
-		grid.addValue(5, 1, 5);
-		
-		grid.addValue(1, 2, 9);
-		grid.addValue(2, 2, 8);
-		grid.addValue(7, 2, 6);
-		
-		grid.addValue(0, 3, 8);
-		grid.addValue(0, 4, 4);
-		grid.addValue(0, 5, 7);
-		
-		grid.addValue(3, 4, 8);
-		grid.addValue(4, 3, 6);
-		grid.addValue(4, 5, 2);
-		grid.addValue(5, 4, 3);
-		
-		grid.addValue(8, 3, 3);
-		grid.addValue(8, 4, 1);
-		grid.addValue(8, 5, 6);
-		
-		grid.addValue(1, 6, 6);
-		grid.addValue(3, 7, 4);
-		grid.addValue(4, 7, 1);
-		grid.addValue(5, 7, 9);
-		grid.addValue(4, 8, 8);
-		
-		grid.addValue(6, 6, 2);
-		grid.addValue(7, 6, 8);
-		grid.addValue(8, 7, 5);
-		grid.addValue(7, 8, 7);
-		grid.addValue(8, 8, 9);
-		
-		grid.printGrid();
-		
-		solve(grid);
-		grid.printGrid();
+		try {
+			Grid grid2 = new Grid(startingGrid);
+			grid2.printGrid();
+			solve(grid2);
+			grid2.printGrid();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println("Done!");
 		
 	}
@@ -110,6 +87,7 @@ public class Solver {
 				}
 			}
 		}
+		
 	}
 
 }
