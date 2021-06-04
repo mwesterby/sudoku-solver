@@ -7,10 +7,13 @@ public class Grid {
 	
 	private ArrayList<SubGrid> subGrids;
 	
-	public Grid() {
-		initaliseSubGrids();
-	}
-	
+	/**
+	 * Given a starting grid, initialise the sudoku.
+	 * @param startingGrid an int[][] array representing a sudoku grid. 
+	 * Each row is represented by three arrays of length three.
+	 * This is then followed by the next row's arrays etc. In total,
+	 * there are 27 arrays which represent the overall staring grid
+	 */
 	public Grid(int[][] startingGrid) {
 		initaliseSubGrids();
 		
@@ -31,6 +34,9 @@ public class Grid {
 		}
 	}
 	
+	/**
+	 * Creates 9 blank SubGrids to represent the sudoku grid.
+	 */
 	private void initaliseSubGrids() {
 		subGrids = new ArrayList<SubGrid>();
 		for (int i = 0; i < 9; i++) {
@@ -38,17 +44,32 @@ public class Grid {
 		}
 	}
 	
-	
+	/**
+	 * Gets the square at a given row and column
+	 * @param row The row that contains the square (0-8)
+	 * @param col The column that contains the square (0-8)
+	 * @return The square at row, column
+	 */
 	public Square getSquare(int row, int col) {
 		SubGrid subGrid = getContainingSubgrid(row, col);
 		Square square = subGrid.getSquare(((row % 3) * 3) + (col % 3));
 		return square;
 	}
 	
+	/**
+	 * Gets the SubGrid which would contain a square at a given row and column
+	 * @param row The row the square is in (0-8)
+	 * @param col The column the square is in (0-8)
+	 * @return The SubGrid object which holds the square at the supplied row and column
+	 */
 	private SubGrid getContainingSubgrid(int row, int col) {
 		return subGrids.get(((row / 3) * 3) + (col / 3));
 	}
 	
+	/**
+	 * Gets all SubGrids which have at least one unsolved square
+	 * @return List of incomplete SubGrids
+	 */
 	public ArrayList<SubGrid> getIncompleteSubgrids() {
 		ArrayList<SubGrid> incompleteSubGrids = new ArrayList<>();
 		for(SubGrid subGrid : subGrids) {
@@ -59,6 +80,10 @@ public class Grid {
 		return incompleteSubGrids;
 	}
 	
+	/**
+	 * If the grid has been solved
+	 * @return True if all values on the grid have be solved
+	 */
 	public boolean gridComplete() {
 		for(SubGrid subGrid: subGrids) {
 			if(!subGrid.isComplete()) {
@@ -69,9 +94,9 @@ public class Grid {
 	}
 	
 	/**
-	 * Columns 0-8
-	 * @param colNumber
-	 * @return
+	 * Gets all squares in a given column
+	 * @param colNumber (0-8)
+	 * @return A list of squares in that column
 	 */
 	public ArrayList<Square> getColumn(int colNumber) {	
 		ArrayList<Square> column = new ArrayList<>();
@@ -84,9 +109,9 @@ public class Grid {
 	
 	
 	/**
-	 * Rows 0-8
-	 * @param rowNumber
-	 * @return
+	 * Gets all squares in a given row
+	 * @param rowNumber (0-8)
+	 * @return A list of squares in that row
 	 */
 	public ArrayList<Square> getRow(int rowNumber) {
 		
@@ -99,7 +124,12 @@ public class Grid {
 		return row;
 	}
 
-	
+	/**
+	 * Excluding the supplied square, returns a set of values that may still be valid for
+	 * any other square in the same row
+	 * @param currentSquare To sample
+	 * @return A set of values that could be valid for other squares in the row
+	 */
 	public HashSet<Integer> remainingPossibilitiesInRow(Square currentSquare) {
 		ArrayList<Square> row = getRow(currentSquare.getRow());
 		HashSet<Integer> remainingPossibilities = new HashSet<>();
@@ -113,7 +143,12 @@ public class Grid {
 		return remainingPossibilities;
 	}
 	
-	
+	/**
+	 * Excluding the supplied square, returns a set of values that may still be valid for
+	 * any other square in the same column
+	 * @param currentSquare To sample
+	 * @return A set of values that could be valid for other squares in the column
+	 */
 	public HashSet<Integer> remainingPossibilitiesInColumn(Square currentSquare) {
 		ArrayList<Square> col = getColumn(currentSquare.getCol());
 		HashSet<Integer> remainingPossibilities = new HashSet<>();
@@ -127,30 +162,38 @@ public class Grid {
 		return remainingPossibilities;
 	}
 	
+
 	/**
-	 * 
-	 * @param col
-	 * @param row
-	 * @param value
+	 * Assign the supplied value to the square at the provided column and row
+	 * This will also remove this value from the set of possibilities for all squares
+	 * which are in the same row, column and SubGrid of the square at the provided coordinates
+	 * @param col Column of the square to assign the value
+	 * @param row Row of the square to assign the value
+	 * @param value The value to assign to the square
 	 */
 	public void addValue(int col, int row, int value) {
-		ArrayList<Square> wholeColumn = getColumn(col);
-		ArrayList<Square> wholeRow = getRow(row);
 		Square square = getSquare(row, col);
-		
 		square.setValue(value);
 		
+		// Remove possibility of supplied value for squares in the same column
+		ArrayList<Square> wholeColumn = getColumn(col);
 		for(Square squareToUpdate: wholeColumn) {
 			squareToUpdate.removePossibility(value);
 		}
 		
+		// Remove possibility of supplied value for squares in the same row
+		ArrayList<Square> wholeRow = getRow(row);
 		for(Square squareToUpdate: wholeRow) {
 			squareToUpdate.removePossibility(value);
 		}
 
+		// Remove possibility of supplied value for squares in the same SubGrid
 		getContainingSubgrid(row, col).removePossibility(value);
 	}
 	
+	/**
+	 * Prints the grid to the console
+	 */
 	public void printGrid() {
 		
 		final String VERTICAL_LINE = "+-------+-------+-------+";

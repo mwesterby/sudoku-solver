@@ -24,15 +24,18 @@ public class Solver {
 		};
 
 		Grid grid = new Grid(startingGrid);
-		solve(grid);
+		System.out.println("Starting Grid:");
+		grid.printGrid();
+		
+		grid = solve(grid);
+		
+		System.out.println("Solution: ");
+		grid.printGrid();
 		System.out.println("Done!");
 
 	}
 
 	public static Grid solve(Grid grid) {
-		System.out.println("Starting Grid:");
-		grid.printGrid();
-
 		while (!grid.gridComplete()) {
 			ArrayList<SubGrid> incompleteSubGrids = grid.getIncompleteSubgrids();
 
@@ -43,6 +46,7 @@ public class Solver {
 					// If only one possibility
 					if (possibilities.size() == 1) {
 						for (int possibility : possibilities) {
+							// Add the value via the grid and not directly on the square, so other squares are updated
 							grid.addValue(square.getCol(), square.getRow(), possibility);
 							System.out.println("Added " + possibility + " to (" + square.getRow() + ", " + square.getCol() + ")");
 						}
@@ -65,17 +69,14 @@ public class Solver {
 								// Add value to grid and update other squares with this
 								grid.addValue(square.getCol(), square.getRow(), possibility);
 								System.out.println("Added " + possibility + " to (" + square.getRow() + ", " + square.getCol() + ")");
-								break;
+								break; // The grid has changed, break out the loop to start again
 							}
 						}
 					}
 				}
-
 			}
 		}
 
-		System.out.println("Solution: ");
-		grid.printGrid();
 		return grid;
 	}
 
