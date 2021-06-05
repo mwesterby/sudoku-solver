@@ -1,4 +1,4 @@
-package solver;
+package main.java.solver;
 
 import java.util.ArrayList;
 import java.util.HashSet;
