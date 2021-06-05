@@ -5,7 +5,6 @@ import static org.junit.Assert.assertArrayEquals;
 import org.junit.Test;
 
 import main.java.solver.Grid;
-import main.java.solver.Solver;
 
 public class SudokuTest {
 
