@@ -219,6 +219,64 @@ public class Grid {
 	}
 	
 	
+	/**
+	 * Solves the Sudoku
+	 */
+	public void solve() {
+		System.out.println("Starting Grid:");
+		printGrid();
+		
+		while (!gridComplete()) {
+			ArrayList<SubGrid> incompleteSubGrids = getIncompleteSubgrids();
+
+			for (SubGrid subGrid : incompleteSubGrids) {
+				ArrayList<Square> squares = subGrid.getEmptySquares();
+				for (Square square : squares) {
+					HashSet<Integer> possibilities = square.getPossibilities();
+					// If only one possibility
+					if (possibilities.size() == 1) {
+						for (int possibility : possibilities) {
+							// Add the value via the grid and not directly on the square, so other squares are updated
+							addValue(square.getCol(), square.getRow(), possibility);
+							System.out.println("Added " + possibility + " to (" + square.getRow() + ", " + square.getCol() + ")");
+						}
+					} else {
+						for (int possibility : possibilities) {
+							// If only square in row to have that value
+							HashSet<Integer> rowPossibilities = remainingPossibilitiesInRow(square);
+
+							// If only square in column to have that value
+							HashSet<Integer> colPossibilities = remainingPossibilitiesInColumn(square);
+
+							// If only square in subgrid to have that value
+							HashSet<Integer> subGridPossibilities = subGrid.getRemainingValues();
+
+							// If only square in row and column that can have this number
+							// and number is not in subgrid, add it
+							if (!rowPossibilities.contains(possibility) && !colPossibilities.contains(possibility)
+									&& subGridPossibilities.contains(possibility)) {
+
+								// Add value to grid and update other squares with this
+								addValue(square.getCol(), square.getRow(), possibility);
+								System.out.println("Added " + possibility + " to (" + square.getRow() + ", " + square.getCol() + ")");
+								break; // The grid has changed, break out the loop to start again
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		System.out.println();
+		System.out.println("Solution: ");
+		printGrid();
+	}
+	
+	
+	/**
+	 * Formats the grid into to a int[][] array
+	 * @return
+	 */
 	public int[][] gridToArray() {
 		
 		int[][] grid = new int[27][3];

@@ -12,8 +12,6 @@ public class SudokuTest {
 	@Test
 	public void canSolve() {
 		
-		Solver solver = new Solver();
-		
 		int[][] startingGrid = new int[][] { 
 			{0, 0, 9}, {0, 4, 0}, {0, 0, 0}, 
 			{0, 0, 0}, {0, 0, 5}, {3, 1, 0},
@@ -32,7 +30,7 @@ public class SudokuTest {
 		Grid grid = new Grid(startingGrid);
 		
 		// Solve the sudoku
-		solver.solve(grid);
+		grid.solve();
 		
 		// Get the solved grid
 		int[][] actual = grid.gridToArray();
