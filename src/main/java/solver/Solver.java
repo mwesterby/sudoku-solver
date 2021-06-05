@@ -5,37 +5,10 @@ import java.util.HashSet;
 
 public class Solver {
 
-	public static void main(String[] args) {
-		System.out.println("Sudoku Solver!");
-
-		int[][] startingGrid = new int[][] { 
-			{0, 0, 9}, {0, 4, 0}, {0, 0, 0}, 
-			{0, 0, 0}, {0, 0, 5}, {3, 1, 0},
-			{0, 6, 1}, {0, 0, 8}, {0, 5, 0},
-
-			{0, 0, 5}, {4, 0, 0}, {2, 0, 3},
-			{0, 1, 0}, {0, 0, 7}, {0, 0, 8},
-			{0, 8, 0}, {0, 0, 0}, {7, 6, 0},
-
-			{3, 0, 6}, {0, 1, 9}, {4, 0, 0},
-			{7, 0, 0}, {0, 0, 0}, {0, 0, 0},
-			{0, 0, 4}, {0, 5, 0}, {6, 2, 7},
-			
-		};
-
-		Grid grid = new Grid(startingGrid);
+	public void solve(Grid grid) {
 		System.out.println("Starting Grid:");
 		grid.printGrid();
 		
-		grid = solve(grid);
-		
-		System.out.println("Solution: ");
-		grid.printGrid();
-		System.out.println("Done!");
-
-	}
-
-	public static Grid solve(Grid grid) {
 		while (!grid.gridComplete()) {
 			ArrayList<SubGrid> incompleteSubGrids = grid.getIncompleteSubgrids();
 
@@ -76,8 +49,9 @@ public class Solver {
 				}
 			}
 		}
-
-		return grid;
+		
+		System.out.println("Solution: ");
+		grid.printGrid();
 	}
 
 }

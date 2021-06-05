@@ -1,6 +1,7 @@
 package main.java.solver;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 
 public class Grid {
@@ -216,4 +217,37 @@ public class Grid {
 		System.out.println(VERTICAL_LINE); // Bottom
 		System.out.println();
 	}
+	
+	
+	public int[][] gridToArray() {
+		
+		int[][] grid = new int[27][3];
+		
+		int startingIndex = 0;
+		
+		for (int row = 0; row < 9; row++) {
+			ArrayList<Square> wholeRow = getRow(row);
+			int[] left = new int[3];
+			int[] centre = new int[3];
+			int[] right = new int[3];
+			
+			for (int i = 0; i < 3; i++) {
+				left[i] = wholeRow.get(i).getValue();
+			}
+			for (int i = 3; i < 6; i++) {
+				centre[i - 3] = wholeRow.get(i).getValue();
+			}
+			for (int i = 6; i < 9; i++) {
+				right[i - 6] = wholeRow.get(i).getValue();
+			}
+			grid[startingIndex] = left;
+			grid[startingIndex + 1] = centre;
+			grid[startingIndex + 2] = right;
+			startingIndex = startingIndex + 3;
+		}
+		
+		return grid;
+		
+	}
+	
 }
